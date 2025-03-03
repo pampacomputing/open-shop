@@ -1,5 +1,9 @@
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function Loading() {
-  return <LoadingSkeleton />
+  return (
+    <div className="w-full h-full border border-solid flex justify-center items-center text-2xl">
+      <LoadingSkeleton />
+    </div>
+  )
 }
