@@ -2,8 +2,13 @@ import Button from "@/components/Button";
 import Header from "@/components/Header";
 import Loading from "./loading";
 import { Suspense } from "react";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { redirect } from "next/navigation";
 
-export default function Payment() {
+export default async function Payment() {
+  const { isAuthenticated } = getKindeServerSession();
+  const isLoggedIn= await isAuthenticated();
+  if(!isLoggedIn) return redirect('/api/auth/login');
   return (
     <>
       <div className="w-screen h-screen flex flex-col justify-items-center gap-2 font-[family-name:var(--font-geist-sans)]">
