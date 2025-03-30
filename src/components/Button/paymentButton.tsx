@@ -1,19 +1,20 @@
 "use client";
+
 import useMercadoPago from "@/app/hooks/useMercadoPago";
 
-export default function PaymentButton() {
+export default function PaymentButton({ className: Style = "" }) {
   const { createMercadoPagoCheckout } = useMercadoPago();
   return (
     <button
       onClick={() =>
         createMercadoPagoCheckout({
           testeId: "123",
-          userEmail: "loveyuuqr@gmail.com",
+          userEmail: "danielftomm@hotmail.com",
         })
       }
-      className="bg-blue-500 text-white px-4 py-2 rounded-md"
+      className={Style}
     >
-      Comprar
+      Buy
     </button>
   );
 }

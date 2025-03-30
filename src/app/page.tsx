@@ -12,7 +12,7 @@ export default async function Home() {
         <Header Auth={isLoggedIn} />
       </div>
       <div className="w-full h-full flex-col justify-items-center">
-        <div className="w-scrren flex flex-col h-full justify-around gap-10 justify-items-center p-10">
+        <div className="w-scrren flex flex-col h-full justify-center gap-10 items-center p-10">
           <div className="w-full h-full border border-solid flex justify-center items-center text-2xl">
             Content
           </div>

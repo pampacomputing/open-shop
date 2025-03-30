@@ -11,12 +11,12 @@ interface ButtonProps {
 
 export default function Button({
   children,
-  Style = "w-80 h-20 rounded bg-inherit shadow-md text-white flex justify-center items-center border-2 border-solid hover:bg-gray-400 hover:text-white/40",
+  Style = "w-80 h-20 rounded bg-inherit shadow-md text-white flex justify-center items-center cursor-pointer border-2 border-solid hover:bg-gray-400 hover:text-white/40",
   href = "/",
   isPayment = false,
 }: ButtonProps) {
   return isPayment ? (
-    <PaymentButton />
+    <PaymentButton className={Style}/>
   ) : (
     <Link href={href} className={Style}>
       {children}
