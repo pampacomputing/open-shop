@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'keen-slider/keen-slider.min.css';
+
 @layer base {
   :root {
     --background: 0 0% 3.9%;
