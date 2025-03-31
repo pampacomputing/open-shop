@@ -4,8 +4,9 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 
 export default async function Products() {
-  const { isAuthenticated } = getKindeServerSession();
-  const isLoggedIn = await isAuthenticated();
+  const { getRoles } = getKindeServerSession();
+  const role = await getRoles();
+  const isLoggedIn = role?.some((role) => role.key === "financial-approver");
   if (!isLoggedIn) return redirect("/api/auth/login");
   return (
     <div className="w-screen h-screen flex flex-col justify-items-center gap-2 font-[family-name:var(--font-geist-sans)]">
@@ -20,9 +21,7 @@ export default async function Products() {
           <div className="w-full h-1/2 border border-solid flex justify-center items-center text-2xl">
             Content
           </div>
-          <div className="w-full flex justify-center items-center">
-            <Button isPayment={true} />
-          </div>
+          
         </div>
       </div>
     </div>

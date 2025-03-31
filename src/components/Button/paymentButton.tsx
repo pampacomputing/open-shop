@@ -1,20 +1,13 @@
 "use client";
-
-import useMercadoPago from "@/app/hooks/useMercadoPago";
+import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs";
 
 export default function PaymentButton({ className: Style = "" }) {
-  const { createMercadoPagoCheckout } = useMercadoPago();
+  
   return (
-    <button
-      onClick={() =>
-        createMercadoPagoCheckout({
-          testeId: "123",
-          userEmail: "danielftomm@hotmail.com",
-        })
-      }
+    <RegisterLink
       className={Style}
     >
       Buy
-    </button>
+    </RegisterLink>
   );
 }

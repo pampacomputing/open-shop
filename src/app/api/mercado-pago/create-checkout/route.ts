@@ -3,68 +3,56 @@ import { Preference } from "mercadopago";
 import mpClient from "@/app/lib/mercado-pago";
 
 export async function POST(req: NextRequest) {
-  const { testeId, userEmail } = await req.json();
-
   try {
-    const preference = new Preference(mpClient);
+    const { userId } = await req.json();
 
+    const preference = new Preference(mpClient);
     const createdPreference = await preference.create({
       body: {
-        external_reference: testeId, // IMPORTANTE: Isso aumenta a pontuação da sua integração com o Mercado Pago - É o id da compra no nosso sistema
-        metadata: {
-          testeId, // O Mercado Pago converte para snake_case, ou seja, testeId vai virar teste_id
-          // userEmail: userEmail,
-          // plan: '123'
-          //etc
-        },
-        ...(userEmail && {
-          payer: {
-            email: userEmail,
-          },
-        }),
-
+        external_reference: userId,
         items: [
           {
-            id: "id-do-seu-produto",
-            description: "Descrição do produto",
-            title: "Nome do produto",
+            id: "produto-123",
+            description: "Assinatura Premium",
+            title: "Assinatura",
             quantity: 1,
-            unit_price: 9.99,
+            unit_price: 0.01,
             currency_id: "BRL",
-            category_id: "category", // Recomendado inserir, mesmo que não tenha categoria - Aumenta a pontuação da sua integração com o Mercado Pago
           },
         ],
         payment_methods: {
-          // Descomente para desativar métodos de pagamento
-          //   excluded_payment_methods: [
-          //     {
-          //       id: "bolbradesco",
-          //     },
-          //     {
-          //       id: "pec",
-          //     },
-          //   ],
-          //   excluded_payment_types: [
-          //     {
-          //       id: "debit_card",
-          //     },
-          //     {
-          //       id: "credit_card",
-          //     },
-          //   ],
-          installments: 12, // Número máximo de parcelas permitidas - calculo feito automaticamente
+          // excluded_payment_methods: [
+          //   {
+          //     id: "bolbradesco",
+          //   },
+          //   {
+          //     id: "pec",
+          //   },
+          // ],
+          // excluded_payment_types: [
+          //   {
+          //     id: "debit_card",
+          //   },
+          //   {
+          //     id: "credit_card",
+          //   },
+          // ],
+          installments: 12, 
+        },
+        metadata: {
+          user_Id: userId,
         },
         auto_return: "approved",
         back_urls: {
-          success: `${req.headers.get("origin")}/?status=sucesso`,
+          success: `${req.headers.get("origin")}/payment/success?userId=${userId}`,
           failure: `${req.headers.get("origin")}/?status=falha`,
-          pending: `${req.headers.get("origin")}/api/mercado-pago/pending`, // Criamos uma rota para lidar com pagamentos pendentes
+          pending: `${req.headers.get("origin")}/api/mercado-pago/pending`,
         },
       },
     });
 
-    if (!createdPreference.id) {
-      throw new Error("No preferenceID");
+    if (!createdPreference?.id) {
+      throw new Error("Não foi gerado preference ID.");
     }
 
     return NextResponse.json({
@@ -72,7 +60,7 @@ export async function POST(req: NextRequest) {
       initPoint: createdPreference.init_point,
     });
   } catch (err) {
-    console.error(err);
-    return NextResponse.error();
+    console.error("Erro ao criar checkout:", err);
+    return NextResponse.json({ error: true }, { status: 500 });
   }
 }
